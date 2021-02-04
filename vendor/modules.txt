@@ -1,0 +1,5 @@
+# github.com/valyala/bytebufferpool v1.0.0
+github.com/valyala/bytebufferpool
+# github.com/valyala/quicktemplate v1.6.3
+## explicit
+github.com/valyala/quicktemplate

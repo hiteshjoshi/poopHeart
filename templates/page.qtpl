@@ -1,0 +1,23 @@
+{% func GeneratePage(class *ClassDetails) %}
+
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../{%s class.Name %}.dart';
+import '{%s class.Name %}_view.dart';
+
+class {%s class.Name %}Page extends StatelessWidget {
+  const {%s class.Name %}Page({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => {%s class.Name %}Cubit(),
+      child: {%s class.Name %}View(),
+    );
+  }
+}
+
+{% endfunc %}
+

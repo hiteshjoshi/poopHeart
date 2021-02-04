@@ -1,0 +1,53 @@
+{% import "fmt" %}
+{% func GenerateCubit(class *ClassDetails) %}
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
+
+part '{%s class.Name %}_state.dart';
+
+class {%s class.Name %}Cubit extends Cubit<{%s class.Name %}State> {
+  {%s class.Name %}Cubit() : super({%s class.Name %}State());
+
+  {%s class.cubitString() %}
+}
+
+{% endfunc %}
+
+
+{% code
+
+
+func (C *ClassDetails) cubitString() string{
+
+	var functionStr = ""
+
+	for _, variable := range C.Variables {
+
+
+		for _,action := range variable.CubitActions {
+
+			switch variable.Type {
+			case "string":
+				functionStr += fmt.Sprintf("\tvoid %s(){\n\temit(state.copyWith(%s:%s));\n\t}\n",action.Name,variable.Name,action.NewValue)
+			case "int":
+				switch action.IntAction {
+				case Add :
+					functionStr += fmt.Sprintf("\tvoid %s(){\n\temit(state.copyWith(%s:state.%s+%s));\n\t}\n",action.Name,variable.Name,variable.Name,action.NewValue)
+				case Subtract:
+					functionStr += fmt.Sprintf("\tvoid %s(){\n\temit(state.copyWith(%s:state.%s-%s));\n\t}\n",action.Name,variable.Name,variable.Name,action.NewValue)
+				case Multiply:
+					functionStr += fmt.Sprintf("\tvoid %s(){\n\temit(state.copyWith(%s:state.%s*%s));\n\t}\n",action.Name,variable.Name,variable.Name,action.NewValue)
+				case Divide:
+					functionStr += fmt.Sprintf("\tvoid %s(){\n\temit(state.copyWith(%s:state.%s/%s));\n\t}\n",action.Name,variable.Name,variable.Name,action.NewValue)
+				case UpdatedInt:
+					functionStr += fmt.Sprintf("\tvoid %s(){\n\temit(state.copyWith(%s:%s));\n\t}\n",action.Name,variable.Name,action.NewValue)
+				}
+			}
+
+		}
+
+	}
+	return functionStr
+}
+%}

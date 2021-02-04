@@ -1,0 +1,59 @@
+{% import "fmt" %}
+{% func GenerateState(class *ClassDetails) %}
+{% code
+sd := class.stateString()
+%}
+part of '{%s class.Name %}_cubit.dart';
+
+class {%s class.Name %}State extends Equatable {
+  const {%s class.Name %}State({%s sd.State%});
+
+  {%s sd.VarList%}
+  @override
+  List<Object> get props =>  [{%s sd.PropsData%}];
+
+  {%s class.Name %}State copyWith(
+    {%s sd.CopyWithData%}
+  }) {
+    return {%s class.Name %}State(
+        {%s sd.ChangeState%}
+    );
+  }
+}
+
+{% endfunc %}
+
+{% code
+type StateData struct{
+    State string
+    VarList string
+    CopyWithData string
+    ChangeState string
+    PropsData string
+}
+func (C *ClassDetails) stateString() *StateData{
+
+    var stateStr = ""
+    var varListStr = ""
+    var copyWithData = ""
+    var changeStateStr = ""
+    var propsData = ""
+
+    for _, variable := range C.Variables {
+            stateStr += fmt.Sprintf("this.%s=%s,", variable.Name,variable.InitialValue)
+            varListStr += fmt.Sprintf("final %s %s;\n", variable.Type, variable.Name)
+            copyWithData += fmt.Sprintf("%s %s,\n", variable.Type, variable.Name)
+            changeStateStr += fmt.Sprintf("%s : %s ?? this.%s,\n", variable.Name, variable.Name, variable.Name)
+            propsData += fmt.Sprintf("%s,",variable.Name)
+        }
+
+        sd := &StateData{
+            State : fmt.Sprintf("{%s}",stateStr),
+            VarList : varListStr,
+            CopyWithData : copyWithData,
+            ChangeState : changeStateStr,
+            PropsData : propsData,
+        }
+        return sd
+}
+%}

@@ -1,0 +1,4 @@
+{% func GenerateExport(class *ClassDetails) %}
+export 'cubit/{%s class.Name %}_cubit.dart';
+export 'view/{%s class.Name %}_page.dart';
+{% endfunc %}
